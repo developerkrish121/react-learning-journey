@@ -1,94 +1,214 @@
-// Importing useState Hook from React
-// useState helps us store and update data inside a component
 import { useState } from "react";
 
 function App() {
-
-  // Creating a state variable called count
-  // count = current value
-  // setCount = function used to update count
-  // 0 = initial value
+  // ----------------------------
+  // Counter State
+  // ----------------------------
   const [count, setCount] = useState(0);
 
-  // Function to increase count by 1
-  function increment() {
+  // ----------------------------
+  // Object State
+  // ----------------------------
+  const [user, setUser] = useState({
+    name: "Krishna",
+    age: 21,
+  });
+
+  // ----------------------------
+  // Array State
+  // ----------------------------
+  const [fruits, setFruits] = useState([
+    "Apple",
+    "Mango",
+    "Orange",
+  ]);
+
+  // ----------------------------
+  // Input State
+  // ----------------------------
+  const [newFruit, setNewFruit] = useState("");
+
+  // ----------------------------
+  // Counter Functions
+  // ----------------------------
+  const increase = () => {
     setCount(count + 1);
-  }
+  };
 
-  // Function to decrease count by 1
-  function decrement() {
-    setCount(count - 1);
-  }
+  const decrease = () => {
+    if (count > 0) {
+      setCount(count - 1);
+    }
+  };
 
-  // Function to reset count back to 0
-  function reset() {
+  const reset = () => {
     setCount(0);
-  }
+  };
+
+  // ----------------------------
+  // Object Function
+  // ----------------------------
+  const increaseAge = () => {
+    setUser({
+      ...user,
+      age: user.age + 1,
+    });
+  };
+
+  // ----------------------------
+  // Add Fruit
+  // ----------------------------
+  const addFruit = () => {
+    if (newFruit.trim() === "") {
+      alert("Please enter a fruit name.");
+      return;
+    }
+
+    setFruits([...fruits, newFruit]);
+
+    setNewFruit("");
+  };
+
+  // ----------------------------
+  // Delete Fruit
+  // ----------------------------
+  const deleteFruit = (indexToDelete) => {
+    const updatedFruits = fruits.filter(
+      (_, index) => index !== indexToDelete
+    );
+
+    setFruits(updatedFruits);
+  };
+
+  // ----------------------------
+  // Replace First Fruit
+  // ----------------------------
+  const replaceFirstFruit = () => {
+    if (fruits.length === 0) return;
+
+    const updated = [...fruits];
+    updated[0] = "Banana";
+
+    setFruits(updated);
+  };
 
   return (
     <div
       style={{
-        textAlign: "center",
-        marginTop: "100px",
+        maxWidth: "700px",
+        margin: "40px auto",
+        padding: "20px",
         fontFamily: "Arial",
       }}
     >
-      {/* Main Heading */}
-      <h1>Counter App</h1>
+      <h1 style={{ textAlign: "center" }}>
+        React Day 3 Practice
+      </h1>
 
-      {/* Display current count value */}
-      <h2>Count: {count}</h2>
+      <hr />
 
-      {/* Conditional Rendering */}
-      {/* Show this message only when count becomes greater than 10 */}
-      {count > 10 && (
-        <p style={{ color: "green", fontWeight: "bold" }}>
-          🔥 Great Progress!
-        </p>
-      )}
+      {/* ========================= */}
+      {/* Counter */}
+      {/* ========================= */}
 
-      {/* Increment Button */}
-      {/* Calls increment() when clicked */}
+      <h2>Counter</h2>
+
+      <h1>{count}</h1>
+
+      <button onClick={increase}>Increase</button>
+
       <button
-        onClick={increment}
-        style={{
-          padding: "10px 20px",
-          margin: "5px",
-          cursor: "pointer",
-        }}
+        onClick={decrease}
+        style={{ marginLeft: "10px" }}
       >
-        Increment
+        Decrease
       </button>
 
-      {/* Decrement Button */}
-      {/* Disabled when count becomes 0 */}
-      <button
-        onClick={decrement}
-        disabled={count === 0}
-        style={{
-          padding: "10px 20px",
-          margin: "5px",
-          cursor: "pointer",
-        }}
-      >
-        Decrement
-      </button>
-
-      {/* Reset Button */}
-      {/* Sets count back to 0 */}
       <button
         onClick={reset}
-        style={{
-          padding: "10px 20px",
-          margin: "5px",
-          cursor: "pointer",
-        }}
+        style={{ marginLeft: "10px" }}
       >
         Reset
       </button>
+
+      <hr />
+
+      {/* ========================= */}
+      {/* Object State */}
+      {/* ========================= */}
+
+      <h2>User Information</h2>
+
+      <h3>Name : {user.name}</h3>
+
+      <h3>Age : {user.age}</h3>
+
+      <button onClick={increaseAge}>
+        Increase Age
+      </button>
+
+      <hr />
+
+      {/* ========================= */}
+      {/* Fruit Manager */}
+      {/* ========================= */}
+
+      <h2>Fruit Manager</h2>
+
+      <input
+        type="text"
+        placeholder="Enter Fruit"
+        value={newFruit}
+        onChange={(e) => setNewFruit(e.target.value)}
+      />
+
+      <button
+        onClick={addFruit}
+        style={{ marginLeft: "10px" }}
+      >
+        Add Fruit
+      </button>
+
+      <button
+        onClick={replaceFirstFruit}
+        style={{ marginLeft: "10px" }}
+      >
+        Replace First Fruit
+      </button>
+
+      <br />
+      <br />
+
+      {fruits.length === 0 ? (
+        <h3>No Fruits Available</h3>
+      ) : (
+        fruits.map((fruit, index) => (
+          <div
+            key={index}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border: "1px solid gray",
+              padding: "10px",
+              marginBottom: "10px",
+              borderRadius: "5px",
+            }}
+          >
+            <span>
+              {index + 1}. {fruit}
+            </span>
+
+            <button
+              onClick={() => deleteFruit(index)}
+            >
+              Delete
+            </button>
+          </div>
+        ))
+      )}
     </div>
   );
 }
 
-// Exporting App component so React can render it
 export default App;
