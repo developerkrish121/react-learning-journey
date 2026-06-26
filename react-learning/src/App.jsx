@@ -1,211 +1,195 @@
 import { useState } from "react";
 
 function App() {
-  // ----------------------------
-  // Counter State
-  // ----------------------------
-  const [count, setCount] = useState(0);
-
-  // ----------------------------
-  // Object State
-  // ----------------------------
-  const [user, setUser] = useState({
-    name: "Krishna",
-    age: 21,
+  // -----------------------
+  // Form State
+  // -----------------------
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    age: "",
+    course: "",
+    gender: "",
+    terms: false,
   });
 
-  // ----------------------------
-  // Array State
-  // ----------------------------
-  const [fruits, setFruits] = useState([
-    "Apple",
-    "Mango",
-    "Orange",
-  ]);
+  // -----------------------
+  // Submitted Data
+  // -----------------------
+  const [submittedData, setSubmittedData] = useState(null);
 
-  // ----------------------------
-  // Input State
-  // ----------------------------
-  const [newFruit, setNewFruit] = useState("");
+  // -----------------------
+  // Handle Input Change
+  // -----------------------
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
 
-  // ----------------------------
-  // Counter Functions
-  // ----------------------------
-  const increase = () => {
-    setCount(count + 1);
-  };
-
-  const decrease = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    }
-  };
-
-  const reset = () => {
-    setCount(0);
-  };
-
-  // ----------------------------
-  // Object Function
-  // ----------------------------
-  const increaseAge = () => {
-    setUser({
-      ...user,
-      age: user.age + 1,
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
-  // ----------------------------
-  // Add Fruit
-  // ----------------------------
-  const addFruit = () => {
-    if (newFruit.trim() === "") {
-      alert("Please enter a fruit name.");
+  // -----------------------
+  // Submit Form
+  // -----------------------
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      formData.name === "" ||
+      formData.email === "" ||
+      formData.age === "" ||
+      formData.course === "" ||
+      formData.gender === ""
+    ) {
+      alert("Please fill all fields.");
       return;
     }
 
-    setFruits([...fruits, newFruit]);
+    if (!formData.terms) {
+      alert("Please accept Terms & Conditions.");
+      return;
+    }
 
-    setNewFruit("");
-  };
+    setSubmittedData(formData);
 
-  // ----------------------------
-  // Delete Fruit
-  // ----------------------------
-  const deleteFruit = (indexToDelete) => {
-    const updatedFruits = fruits.filter(
-      (_, index) => index !== indexToDelete
-    );
+    alert("Registration Successful!");
 
-    setFruits(updatedFruits);
-  };
-
-  // ----------------------------
-  // Replace First Fruit
-  // ----------------------------
-  const replaceFirstFruit = () => {
-    if (fruits.length === 0) return;
-
-    const updated = [...fruits];
-    updated[0] = "Banana";
-
-    setFruits(updated);
+    setFormData({
+      name: "",
+      email: "",
+      age: "",
+      course: "",
+      gender: "",
+      terms: false,
+    });
   };
 
   return (
     <div
       style={{
-        maxWidth: "700px",
+        width: "450px",
         margin: "40px auto",
         padding: "20px",
+        border: "1px solid gray",
+        borderRadius: "10px",
         fontFamily: "Arial",
       }}
     >
-      <h1 style={{ textAlign: "center" }}>
-        React Day 3 Practice
-      </h1>
+      <h1>Student Registration Form</h1>
+
+      <form onSubmit={handleSubmit}>
+
+        <label>Name</label>
+        <br />
+
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+
+        <br /><br />
+
+        <label>Email</label>
+        <br />
+
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+
+        <br /><br />
+
+        <label>Age</label>
+        <br />
+
+        <input
+          type="number"
+          name="age"
+          value={formData.age}
+          onChange={handleChange}
+        />
+
+        <br /><br />
+
+        <label>Course</label>
+        <br />
+
+        <select
+          name="course"
+          value={formData.course}
+          onChange={handleChange}
+        >
+          <option value="">Select Course</option>
+          <option value="React">React</option>
+          <option value="Java">Java</option>
+          <option value="Python">Python</option>
+          <option value="MERN">MERN Stack</option>
+        </select>
+
+        <br /><br />
+
+        <label>Gender</label>
+
+        <br />
+
+        <input
+          type="radio"
+          name="gender"
+          value="Male"
+          checked={formData.gender === "Male"}
+          onChange={handleChange}
+        />
+        Male
+
+        <input
+          type="radio"
+          name="gender"
+          value="Female"
+          checked={formData.gender === "Female"}
+          onChange={handleChange}
+        />
+        Female
+
+        <br /><br />
+
+        <input
+          type="checkbox"
+          name="terms"
+          checked={formData.terms}
+          onChange={handleChange}
+        />
+
+        I Accept Terms & Conditions
+
+        <br /><br />
+
+        <button type="submit">
+          Register
+        </button>
+      </form>
 
       <hr />
 
-      {/* ========================= */}
-      {/* Counter */}
-      {/* ========================= */}
+      {submittedData && (
+        <>
+          <h2>Submitted Details</h2>
 
-      <h2>Counter</h2>
+          <p><strong>Name:</strong> {submittedData.name}</p>
 
-      <h1>{count}</h1>
+          <p><strong>Email:</strong> {submittedData.email}</p>
 
-      <button onClick={increase}>Increase</button>
+          <p><strong>Age:</strong> {submittedData.age}</p>
 
-      <button
-        onClick={decrease}
-        style={{ marginLeft: "10px" }}
-      >
-        Decrease
-      </button>
+          <p><strong>Course:</strong> {submittedData.course}</p>
 
-      <button
-        onClick={reset}
-        style={{ marginLeft: "10px" }}
-      >
-        Reset
-      </button>
-
-      <hr />
-
-      {/* ========================= */}
-      {/* Object State */}
-      {/* ========================= */}
-
-      <h2>User Information</h2>
-
-      <h3>Name : {user.name}</h3>
-
-      <h3>Age : {user.age}</h3>
-
-      <button onClick={increaseAge}>
-        Increase Age
-      </button>
-
-      <hr />
-
-      {/* ========================= */}
-      {/* Fruit Manager */}
-      {/* ========================= */}
-
-      <h2>Fruit Manager</h2>
-
-      <input
-        type="text"
-        placeholder="Enter Fruit"
-        value={newFruit}
-        onChange={(e) => setNewFruit(e.target.value)}
-      />
-
-      <button
-        onClick={addFruit}
-        style={{ marginLeft: "10px" }}
-      >
-        Add Fruit
-      </button>
-
-      <button
-        onClick={replaceFirstFruit}
-        style={{ marginLeft: "10px" }}
-      >
-        Replace First Fruit
-      </button>
-
-      <br />
-      <br />
-
-      {fruits.length === 0 ? (
-        <h3>No Fruits Available</h3>
-      ) : (
-        fruits.map((fruit, index) => (
-          <div
-            key={index}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              border: "1px solid gray",
-              padding: "10px",
-              marginBottom: "10px",
-              borderRadius: "5px",
-            }}
-          >
-            <span>
-              {index + 1}. {fruit}
-            </span>
-
-            <button
-              onClick={() => deleteFruit(index)}
-            >
-              Delete
-            </button>
-          </div>
-        ))
+          <p><strong>Gender:</strong> {submittedData.gender}</p>
+        </>
       )}
     </div>
   );
