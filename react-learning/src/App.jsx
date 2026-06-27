@@ -1,294 +1,88 @@
-import { useState } from "react";
+import "./App.css";
+
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import StudentCard from "./components/StudentCard";
 
 function App() {
-  // ----------------------------
-  // Form State
-  // ----------------------------
-  const initialForm = {
-    name: "",
-    email: "",
-    phone: "",
-    age: "",
-    course: "",
-    gender: "",
-    password: "",
-    confirmPassword: "",
-    terms: false,
+  const students = [
+    {
+      id: 1,
+      name: "Krishna",
+      course: "React",
+      percentage: 92,
+      college: "Quantum University",
+      email: "krishna@example.com",
+      phone: "123-456-7890",
+      skills: "JavaScript, React, Node.js"
+    },
+    {
+      id: 2,
+      name: "Rahul",
+      course: "Java",
+      percentage: 85,
+      college: "Quantum University",
+      email: "krishna@example.com",
+      phone: "123-456-7890",
+      skills: "JavaScript, React, Node.js"
+    },
+    {
+      id: 3,
+      name: "Anjali",
+      course: "Python",
+      percentage: 90,
+      college: "Quantum University",
+      email: "anjali@example.com",
+      phone: "098-765-4321",
+      skills: "Python, Django, Flask"
+    },
+    {
+      id: 4,
+      name: "Amit",
+      course: "DSA",
+      percentage: 88,
+      college: "Quantum University",
+      email: "amit@example.com",
+      phone: "555-555-5555",
+      skills: "C++, Algorithms, Data Structures"
+    },
+    {
+      id: 5,
+      name: "Neha",
+      course: "MERN",
+      percentage: 95,
+      college: "Quantum University",
+      email: "neha@example.com",
+      phone: "111-111-1111",
+      skills: "JavaScript, React, Node.js, MongoDB"
+    },
+  ];
+
+  const viewProfile = (studentName) => {
+    alert(`Viewing Profile of ${studentName}`);
   };
 
-  const [formData, setFormData] = useState(initialForm);
-  const [submittedData, setSubmittedData] = useState(null);
-
-  // ----------------------------
-  // Handle Input Change
-  // ----------------------------
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  // ----------------------------
-  // Clear Form
-  // ----------------------------
-  const clearForm = () => {
-    setFormData(initialForm);
-  };
-
-  // ----------------------------
-  // Handle Submit
-  // ----------------------------
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Empty Field Validation
-    if (
-      formData.name === "" ||
-      formData.email === "" ||
-      formData.phone === "" ||
-      formData.age === "" ||
-      formData.course === "" ||
-      formData.gender === "" ||
-      formData.password === "" ||
-      formData.confirmPassword === ""
-    ) {
-      alert("Please fill all fields.");
-      return;
-    }
-
-    // Age Validation
-    if (Number(formData.age) < 18) {
-      alert("Age must be at least 18.");
-      return;
-    }
-
-    // Password Validation
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
-    // Terms Validation
-    if (!formData.terms) {
-      alert("Please accept Terms & Conditions.");
-      return;
-    }
-
-    // Store Submitted Data
-    setSubmittedData(formData);
-
-    alert("Registration Successful!");
-
-    // Reset Form
-    setFormData(initialForm);
-  };
+  const deleteProfile = (studentNmae) => {
+    alert(`Deleting profile of ${studentNmae}`);
+  }
 
   return (
-    <div
-      style={{
-        width: "450px",
-        margin: "30px auto",
-        padding: "20px",
-        border: "2px solid #ccc",
-        borderRadius: "10px",
-        fontFamily: "Arial",
-      }}
-    >
-      <h1 style={{ textAlign: "center" }}>
-        Student Registration Form
-      </h1>
+    <>
+      <Header />
 
-      <form onSubmit={handleSubmit}>
-        {/* Name */}
-        <label>Name</label>
-        <br />
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-        />
+      <div className="container">
+        {students.map((student) => (
+          <StudentCard
+            key={student.id}
+            student={student}
+            onViewProfile={viewProfile}
+            onDeleteProfile={deleteProfile}
+          />
+        ))}
+      </div>
 
-        <br />
-        <br />
-
-        {/* Email */}
-        <label>Email</label>
-        <br />
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        {/* Phone */}
-        <label>Phone Number</label>
-        <br />
-        <input
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        {/* Age */}
-        <label>Age</label>
-        <br />
-        <input
-          type="number"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        {/* Course */}
-        <label>Course</label>
-        <br />
-        <select
-          name="course"
-          value={formData.course}
-          onChange={handleChange}
-        >
-          <option value="">Select Course</option>
-          <option value="React">React</option>
-          <option value="Java">Java</option>
-          <option value="Python">Python</option>
-          <option value="MERN Stack">MERN Stack</option>
-        </select>
-
-        <br />
-        <br />
-
-        {/* Gender */}
-        <label>Gender</label>
-        <br />
-
-        <input
-          type="radio"
-          name="gender"
-          value="Male"
-          checked={formData.gender === "Male"}
-          onChange={handleChange}
-        />
-        Male
-
-        <input
-          type="radio"
-          name="gender"
-          value="Female"
-          checked={formData.gender === "Female"}
-          onChange={handleChange}
-          style={{ marginLeft: "15px" }}
-        />
-        Female
-
-        <br />
-        <br />
-
-        {/* Password */}
-        <label>Password</label>
-        <br />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        {/* Confirm Password */}
-        <label>Confirm Password</label>
-        <br />
-        <input
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        {/* Terms */}
-        <input
-          type="checkbox"
-          name="terms"
-          checked={formData.terms}
-          onChange={handleChange}
-        />
-
-        <label style={{ marginLeft: "5px" }}>
-          I accept Terms & Conditions
-        </label>
-
-        <br />
-        <br />
-
-        {/* Buttons */}
-        <button
-          type="submit"
-          disabled={!formData.terms}
-        >
-          Register
-        </button>
-
-        <button
-          type="button"
-          onClick={clearForm}
-          style={{ marginLeft: "10px" }}
-        >
-          Clear Form
-        </button>
-      </form>
-
-      <hr />
-
-      {/* Submitted Data */}
-      {submittedData && (
-        <>
-          <h2>Submitted Details</h2>
-
-          <p>
-            <strong>Name:</strong> {submittedData.name}
-          </p>
-
-          <p>
-            <strong>Email:</strong> {submittedData.email}
-          </p>
-
-          <p>
-            <strong>Phone:</strong> {submittedData.phone}
-          </p>
-
-          <p>
-            <strong>Age:</strong> {submittedData.age}
-          </p>
-
-          <p>
-            <strong>Course:</strong> {submittedData.course}
-          </p>
-
-          <p>
-            <strong>Gender:</strong> {submittedData.gender}
-          </p>
-        </>
-      )}
-    </div>
+      <Footer />
+    </>
   );
 }
 
