@@ -1,8 +1,18 @@
-function StudentCard({ student, onViewProfile, onDeleteProfile }) {
+// StudentCard Component
+// This component receives data from App.jsx using props.
+
+function StudentCard({
+  student,
+  onViewProfile,
+  onDeleteStudent,
+  onShowResult,
+}) {
   return (
     <div className="card">
+      {/* Student Name */}
       <h2>{student.name}</h2>
 
+      {/* Student Details */}
       <p>
         <strong>Course:</strong> {student.course}
       </p>
@@ -15,29 +25,26 @@ function StudentCard({ student, onViewProfile, onDeleteProfile }) {
         <strong>College:</strong> {student.college}
       </p>
 
-       <p>
-        <strong>Email:</strong> {student.email}
-      </p>
+      {/* Buttons */}
+      <div className="button-group">
+        <button
+          onClick={() => onViewProfile(student.name)}
+        >
+          View Profile
+        </button>
 
-       <p>
-        <strong>Phone:</strong> {student.phone}
-      </p>
+        <button
+          onClick={() => onDeleteStudent(student.name)}
+        >
+          Delete
+        </button>
 
-       <p>
-        <strong>Skills:</strong> {student.skills}
-      </p>
-
-      <button
-        onClick={() => onViewProfile(student.name)}
-      >
-        View Profile
-      </button>
-
-      <button 
-        onClick={() => onDeleteProfile(student.name)}
-      >
-        Delete profile
-      </button>
+        <button
+          onClick={() => onShowResult(student)}
+        >
+          Result
+        </button>
+      </div>
     </div>
   );
 }
