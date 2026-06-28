@@ -1,102 +1,97 @@
+import { useState, useEffect } from "react";
 import "./App.css";
 
-// Import Components
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import StudentCard from "./components/StudentCard";
-import Stats from "./components/Stats";
-
 function App() {
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState("");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // -----------------------------
-  // Student Data
-  // -----------------------------
-  const students = [
-    {
-      id: 1,
-      name: "Krishna",
-      course: "React",
-      percentage: 92,
-      college: "Quantum University",
-    },
-    {
-      id: 2,
-      name: "Rahul",
-      course: "Java",
-      percentage: 85,
-      college: "Quantum University",
-    },
-    {
-      id: 3,
-      name: "Anjali",
-      course: "Python",
-      percentage: 90,
-      college: "Quantum University",
-    },
-    {
-      id: 4,
-      name: "Amit",
-      course: "DSA",
-      percentage: 88,
-      college: "Quantum University",
-    },
-    {
-      id: 5,
-      name: "Neha",
-      course: "MERN Stack",
-      percentage: 95,
-      college: "Quantum University",
-    },
-  ];
+  // Runs only once after component loads
+  useEffect(() => {
+    console.log("Component Mounted");
+  }, []);
 
-  // -----------------------------
-  // Callback Functions
-  // -----------------------------
+  // Runs whenever count changes
+  useEffect(() => {
+    console.log("Count Changed:", count);
+  }, [count]);
 
-  // View Profile
-  const viewProfile = (studentName) => {
-    alert(`Viewing Profile of ${studentName}`);
-  };
+  // Fetch data from API
+  const fetchUsers = async () => {
+    setLoading(true);
 
-  // Delete Student
-  const deleteStudent = (studentName) => {
-    alert(`Deleting ${studentName}`);
-  };
-
-  // Show Result
-  const showResult = (student) => {
-    alert(
-      `${student.name} scored ${student.percentage}% in ${student.course}`
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/users"
     );
+
+    const data = await response.json();
+
+    setUsers(data);
+    setLoading(false);
   };
 
-  // -----------------------------
-  // JSX
-  // -----------------------------
   return (
-    <>
-      {/* Header */}
-      <Header />
+    <div className="container">
 
-      {/* Statistics */}
-      <Stats students={students} />
+      <h1>Day 6 - useEffect Hook</h1>
 
-      {/* Student Cards */}
-      <div className="container">
-        {students.map((student) => (
-          <StudentCard
-            key={student.id}
-            student={student}
-            onViewProfile={viewProfile}
-            onDeleteStudent={deleteStudent}
-            onShowResult={showResult}
-          />
-        ))}
+      {/* Counter */}
+
+      <div className="card">
+        <h2>Counter</h2>
+
+        <h3>{count}</h3>
+
+        <button onClick={() => setCount(count + 1)}>
+          Increase
+        </button>
+
+        <button onClick={() => setCount(0)}>
+          Reset
+        </button>
       </div>
 
-      {/* Footer */}
-      <Footer />
-    </>
+      {/* Input */}
+
+      <div className="card">
+        <h2>Live Input</h2>
+
+        <input
+          type="text"
+          placeholder="Enter Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <h3>Hello {name || "Guest"} 👋</h3>
+      </div>
+
+      {/* API */}
+
+      <div className="card">
+
+        <h2>Fetch Users</h2>
+
+        <button onClick={fetchUsers}>
+          Get Users
+        </button>
+
+        {loading && <p>Loading...</p>}
+
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              <strong>{user.name}</strong>
+              <br />
+              {user.email}
+            </li>
+          ))}
+        </ul>
+
+      </div>
+
+    </div>
   );
 }
 

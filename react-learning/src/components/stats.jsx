@@ -37,7 +37,7 @@ function Stats({ students }) {
         </div>
 
         <div className="stat-card">
-          <h3>Average Percentage</h3>
+          
           <p>{averagePercentage}%</p>
         </div>
       </div>
