@@ -1,96 +1,67 @@
-import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [name, setName] = useState("");
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // Array of Strings
+  const colors = ["Red", "Blue", "Green", "Black"];
 
-  // Runs only once after component loads
-  useEffect(() => {
-    console.log("Component Mounted");
-  }, []);
+  // Create a new array using map()
+  const upperCaseColors = colors.map((color) => color.toUpperCase());
 
-  // Runs whenever count changes
-  useEffect(() => {
-    console.log("Count Changed:", count);
-  }, [count]);
-
-  // Fetch data from API
-  const fetchUsers = async () => {
-    setLoading(true);
-
-    const response = await fetch(
-      "https://jsonplaceholder.typicode.com/users"
-    );
-
-    const data = await response.json();
-
-    setUsers(data);
-    setLoading(false);
-  };
+  // Array of Objects
+  const students = [
+    {
+      id: 1,
+      name: "Krishna",
+      age: 21,
+      isPlaced: true,
+    },
+    {
+      id: 2,
+      name: "Rahul",
+      age: 20,
+      isPlaced: false,
+    },
+    {
+      id: 3,
+      name: "Ankit",
+      age: 22,
+      isPlaced: true,
+    },
+  ];
 
   return (
     <div className="container">
+      <h1>React Day 7 - Lists & Keys</h1>
 
-      <h1>Day 6 - useEffect Hook</h1>
+      {/* ---------------------------- */}
+      <h2>1. Original Colors</h2>
 
-      {/* Counter */}
+      {colors.map((color, index) => (
+        <p key={index}>{color}</p>
+      ))}
 
-      <div className="card">
-        <h2>Counter</h2>
+      {/* ---------------------------- */}
+      <h2>2. Uppercase Colors</h2>
 
-        <h3>{count}</h3>
+      {upperCaseColors.map((color, index) => (
+        <p key={index}>{color}</p>
+      ))}
 
-        <button onClick={() => setCount(count + 1)}>
-          Increase
-        </button>
+      {/* ---------------------------- */}
+      <h2>3. Student List</h2>
 
-        <button onClick={() => setCount(0)}>
-          Reset
-        </button>
-      </div>
+      {students.map((student) => (
+        <div className="card" key={student.id}>
+          <h3>{student.name}</h3>
 
-      {/* Input */}
+          <p>Age : {student.age}</p>
 
-      <div className="card">
-        <h2>Live Input</h2>
-
-        <input
-          type="text"
-          placeholder="Enter Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        <h3>Hello {name || "Guest"} 👋</h3>
-      </div>
-
-      {/* API */}
-
-      <div className="card">
-
-        <h2>Fetch Users</h2>
-
-        <button onClick={fetchUsers}>
-          Get Users
-        </button>
-
-        {loading && <p>Loading...</p>}
-
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              <strong>{user.name}</strong>
-              <br />
-              {user.email}
-            </li>
-          ))}
-        </ul>
-
-      </div>
-
+          <p>
+            Status :
+            {student.isPlaced ? "  Placed" : "  Not Placed"}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
